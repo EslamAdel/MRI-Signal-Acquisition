@@ -9,7 +9,7 @@ Rx = FOVx / size(protons, 2); % in mm
 rotatedProtons = protons;
 
 %% Position Matrix in X
-x = -1*FOVx/2:Rx:FOVx/2; %in mm 
+x = -1*FOVx/2:Rx:FOVx/2-Rx; %in mm 
 
 %% Rotation matrix due to Gx 
 gamma = 42.6; %MHz/T
@@ -22,12 +22,14 @@ dt = 2*pi/(Gx*gamma*FOVx);
 
 time = 0:dt:tau;
 signal = zeros(1,length(time));
+idx = 1;
 for t = 0:dt:tau
     angles = w*t;
     for i = 1:size(protons, 2)
-        rotatedProtons(:,i) = rotateVector(protons(:,i), angles(i));
+        rotatedProtons(:,i) = rotateVector(protons(:,i), angles(i), 'Z');
     end
     totalM = sum(rotatedProtons, 2);
-    signal(t) = norm(totalM);
+    signal(idx) = norm(totalM);
+    idx = idx + 1;
 end
 
