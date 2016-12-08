@@ -3,7 +3,8 @@ protons = repmat(protons,1,200);
 FOVx = 20; %mm
 Gx = 10; %mT/m
 tau = 1; %sec
-signal = getSignal(protons, Gx, FOVx, tau);
+rotatedProtons = getSignal(protons, Gx, FOVx, tau,1, 0.4);
+signal = getSignal(rotatedProtons, Gx, FOVx, tau, 0, 0.4);
 t = 0:tau/length(signal):tau - tau/length(signal);
 figure,
 plot(t,signal);
