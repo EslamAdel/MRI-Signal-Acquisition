@@ -1,14 +1,15 @@
 clc;
-clear;
+clear all;
 close all;
 protons = [1 0 0]';
 protons = repmat(protons,1,200);
-FOVx = 20; %mm
 Gx = 10; %mT/m
+FOVx = 20; %mm
 tau = 0.5;%sec
+Accumulate = 1;
 dt = 0.001; %sec
-rotatedProtons = getSignal(protons, -1*Gx, FOVx, tau,1, 1000,0);
-[signalFFT, t] = getSignal(rotatedProtons, Gx, FOVx, tau, 0, 1000,dt);
+T2 = 1000;
+[signalFFT, t] = getSignal(protons, Gx, FOVx, tau, Accumulate, T2,dt);
 figure,
 plot(t,real(signalFFT),'b','linewidth',1.5);
 grid on;
@@ -17,4 +18,3 @@ signal = fft(signalFFT);
 figure,
 plot(abs(circshift(signal', round(length(signal)/2))),'b','linewidth',1.5);
 grid on;
-title('Reconstructed Signal');

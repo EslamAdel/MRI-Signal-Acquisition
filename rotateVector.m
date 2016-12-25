@@ -1,5 +1,26 @@
 function newVector = rotateVector (vector, angle, rotationAxis)
-%% Convert rotation angle to radian
+%% newVector = rotateVector (vector, angle, rotationAxis)
+% Rotate a 3D vector around X, Y, or Z axis conuter clock wise by a 
+% specific angle.
+% inputs : 
+%
+% vector : A 3D vector of size 3x1 to be rotated 
+%
+% angle : the rotation angle deg.
+% 
+% rotationAxis : the rotation axis 'X', 'Y', or 'Z' are only the valid
+%                parameters for this variable.
+%
+% output : 
+% newVector : the vector after rotation.
+% 
+% example : 
+%   x = [1; 0; 0];
+%   rotateVector(x, 90, 'Z')
+%
+% Author : Eslam Mahmoud <eslam.adel.mahmoud.ali@gmail.com>
+
+%% Convert to radian
 angle = angle * pi / 180;
 
 %% Build X rotation Matrix
@@ -27,8 +48,10 @@ switch(rotationAxis)
   
   case 'Z'
     rotationMatrix = Rz;
+    
   otherwise
   error('Not Supported');
+  
 end
 
 %% Calculate the rotation result
