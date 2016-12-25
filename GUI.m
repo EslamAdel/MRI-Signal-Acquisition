@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 25-Dec-2016 12:01:22
+% Last Modified by GUIDE v2.5 25-Dec-2016 13:15:40
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -72,17 +72,6 @@ function varargout = GUI_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-
-
-function GxVal_Callback(hObject, eventdata, handles)
-% hObject    handle to GxVal (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of GxVal as text
-%        str2double(get(hObject,'String')) returns contents of GxVal as a double
-
-
 % --- Executes during object creation, after setting all properties.
 function GxVal_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to GxVal (see GCBO)
@@ -94,17 +83,6 @@ function GxVal_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-
-function FOVxVal_Callback(hObject, eventdata, handles)
-% hObject    handle to FOVxVal (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of FOVxVal as text
-%        str2double(get(hObject,'String')) returns contents of FOVxVal as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function FOVxVal_CreateFcn(hObject, eventdata, handles)
@@ -118,17 +96,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-
-function T2Val_Callback(hObject, eventdata, handles)
-% hObject    handle to T2Val (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of T2Val as text
-%        str2double(get(hObject,'String')) returns contents of T2Val as a double
-
-
 % --- Executes during object creation, after setting all properties.
 function T2Val_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to T2Val (see GCBO)
@@ -141,17 +108,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-
-function TRVal_Callback(hObject, eventdata, handles)
-% hObject    handle to TRVal (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of TRVal as text
-%        str2double(get(hObject,'String')) returns contents of TRVal as a double
-
-
 % --- Executes during object creation, after setting all properties.
 function TRVal_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to TRVal (see GCBO)
@@ -163,16 +119,6 @@ function TRVal_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-
-function dTVal_Callback(hObject, eventdata, handles)
-% hObject    handle to dTVal (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of dTVal as text
-%        str2double(get(hObject,'String')) returns contents of dTVal as a double
 
 
 % --- Executes during object creation, after setting all properties.
@@ -213,26 +159,6 @@ plot(abs(circshift(signal', round(length(signal)/2))),'b','linewidth',1.5);
 title('Reconstructed Object');
 grid on;
 
-
-% --- Executes on button press in PAVal.
-function PAVal_Callback(hObject, eventdata, handles)
-% hObject    handle to PAVal (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of PAVal
-
-
-
-function edit7_Callback(hObject, eventdata, handles)
-% hObject    handle to edit7 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit7 as text
-%        str2double(get(hObject,'String')) returns contents of edit7 as a double
-
-
 % --- Executes during object creation, after setting all properties.
 function edit7_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit7 (see GCBO)
@@ -244,16 +170,6 @@ function edit7_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-
-function edit8_Callback(hObject, eventdata, handles)
-% hObject    handle to edit8 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit8 as text
-%        str2double(get(hObject,'String')) returns contents of edit8 as a double
 
 
 % --- Executes during object creation, after setting all properties.
@@ -269,13 +185,69 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on key press with focus on PAVal and none of its controls.
-function PAVal_KeyPressFcn(hObject, eventdata, handles)
+% --- Executes on button press in PAVal.
+function PAVal_Callback(hObject, eventdata, handles)
 % hObject    handle to PAVal (see GCBO)
-% eventdata  structure with the following fields (see UICONTROL)
-%	Key: name of the key that was pressed, in lower case
-%	Character: character interpretation of the key(s) that was pressed
-%	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of PAVal
+
+
+
+function TRVal_Callback(hObject, eventdata, handles)
+% hObject    handle to TRVal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of TRVal as text
+%        str2double(get(hObject,'String')) returns contents of TRVal as a double
+
+
+
+function dTVal_Callback(hObject, eventdata, handles)
+% hObject    handle to dTVal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of dTVal as text
+%        str2double(get(hObject,'String')) returns contents of dTVal as a double
+
+
+
+function FOVxVal_Callback(hObject, eventdata, handles)
+% hObject    handle to FOVxVal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of FOVxVal as text
+%        str2double(get(hObject,'String')) returns contents of FOVxVal as a double
+
+
+
+function GxVal_Callback(hObject, eventdata, handles)
+% hObject    handle to GxVal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of GxVal as text
+%        str2double(get(hObject,'String')) returns contents of GxVal as a double
+
+
+
+function T2Val_Callback(hObject, eventdata, handles)
+% hObject    handle to T2Val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of T2Val as text
+%        str2double(get(hObject,'String')) returns contents of T2Val as a double
+
+
+% --- Executes on mouse press over axes background.
+function signalFig_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to signalFig (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 
@@ -283,4 +255,14 @@ function PAVal_KeyPressFcn(hObject, eventdata, handles)
 function objectFig_ButtonDownFcn(hObject, eventdata, handles)
 % hObject    handle to objectFig (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on key press with focus on simulateButton and none of its controls.
+function simulateButton_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to simulateButton (see GCBO)
+% eventdata  structure with the following fields (see UICONTROL)
+%	Key: name of the key that was pressed, in lower case
+%	Character: character interpretation of the key(s) that was pressed
+%	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
 % handles    structure with handles and user data (see GUIDATA)
