@@ -193,6 +193,25 @@ function simulateButton_Callback(hObject, eventdata, handles)
 % hObject    handle to simulateButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+protons = [1 0 0]';
+FOVx = str2double(get(handles.FOVxVal,'String'));
+protons = repmat(protons,1,10*FOVx);
+Gx = str2double(get(handles.GxVal,'String')); %mT/m
+tau = str2double(get(handles.TRVal,'String'));%sec
+Accumulate = get(handles.PAVal,'value');
+dt = str2double(get(handles.dTVal,'String')); %sec
+T2 = str2double(get(handles.T2Val,'String'));
+[signalFFT, t] = getSignal(protons, Gx, FOVx, tau, Accumulate, T2,dt);
+
+axes(handles.signalFig);
+plot(t,real(signalFFT),'b','linewidth',1.5);
+grid on;
+title('Signal S(t)');
+signal = fft(signalFFT);
+axes(handles.objectFig);
+plot(abs(circshift(signal', round(length(signal)/2))),'b','linewidth',1.5);
+title('Reconstructed Object');
+grid on;
 
 
 % --- Executes on button press in PAVal.
