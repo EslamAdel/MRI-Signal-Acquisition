@@ -18,7 +18,8 @@ function newVector = rotateVector (vector, angle, rotationAxis)
 %   x = [1; 0; 0];
 %   rotateVector(x, 90, 'Z')
 %
-% Author : Eslam Mahmoud <eslam.adel.mahmoud.ali@gmail.com>
+% Author : 
+% Eslam Mahmoud <eslam.adel.mahmoud.ali@gmail.com>
 
 %% Convert to radian
 angle = angle * pi / 180;

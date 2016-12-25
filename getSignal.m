@@ -47,7 +47,9 @@ function [signal, time] = getSignal(protons, Gx, FOVx, tau, phaseAcc, T2, dt)
 % plot(abs(circshift(signal', round(length(signal)/2))),'b','linewidth',1.5);
 % grid on;
 % title('Reconstructed Signal');
-% Author : Eslam Mahmoud <eslam.adel.mahmoud.ali@gmail.com>
+%
+% Author : 
+% Eslam Mahmoud <eslam.adel.mahmoud.ali@gmail.com>
 
 %% Get Rx (resolution in X direction).
 Rx = FOVx / size(protons, 2); % in mm
@@ -100,7 +102,7 @@ for t = time(1:end)
     end
     
     % Now Sum all protons.
-    totalM = sum(rotatedProtons, 2)*exp(-t/T2);
+    totalM = sum(rotatedProtons, 2).*exp(-t/T2);
     
     % Get the signal Mxy = Mx + iMy
     signal(idx) = totalM(1) + totalM(2)*1j;
