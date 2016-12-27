@@ -1,4 +1,4 @@
-function [signal, time] = getSignal(protons, Gx, FOVx, tau, phaseAcc, T2, dt)
+function [signal, time] = getSignal(protons, Gx, FOVx, Rx, tau, phaseAcc, T2, dt)
 %% [signal, time] = getSignal(protons, Gx, FOVx, tau, phaseAcc, T2, dt)
 % Simulate MRI signal aquisition of one dimentional object.
 % inputs : 
@@ -10,6 +10,8 @@ function [signal, time] = getSignal(protons, Gx, FOVx, tau, phaseAcc, T2, dt)
 %
 % FoVx : The Field of view in x direction it is the lenght of the 1D object
 %        it must be in mm.
+%
+% Rx : resolution of object in x dimention.
 %
 % tau : The recieving time in seconds 
 %
@@ -29,30 +31,45 @@ function [signal, time] = getSignal(protons, Gx, FOVx, tau, phaseAcc, T2, dt)
 % clc;
 % clear all;
 % close all;
+% 
+% %% Setting parameters
+% Gx = 10e-3;  % in T/m
+% FOVx = 20e-3;  % in m
+% Rx = 5e-4; % in m
 % protons = [1 0 0]';
-% protons = repmat(protons,1,200);
-% Gx = 10; %mT/m
-% FOVx = 20; %mm
-% tau = 0.5;%sec
-% Accumulate = 1;
-% dt = 0.001; %sec
-% T2 = 1000; %sec
-% [signalFFT, t] = getSignal(protons, Gx, FOVx, tau, Accumulate, T2,dt);
+% protons = repmat(protons,1,round(FOVx/Rx));
+% tau = 5e-3;  %sec
+% Accumulate = 1; 
+% dt = 0.1e-4; %sec
+% fs = 1/dt;
+% 
+% %% Ignore T2 Effect 
+% T2 = 100;  %sec
+% 
+% %% Start Simulation
+% [signalFFT, t] = getSignal(protons, Gx, FOVx, Rx, tau, Accumulate, T2,dt);
+% 
+% %% Plot the sampled k-space 
 % figure,
 % plot(t,real(signalFFT),'b','linewidth',1.5);
+% xlabel('Time (sec)');
+% ylabel('Mangnitude');
 % grid on;
 % title('The Magnitude of Signal S(t)');
-% signal = fft(signalFFT);
+% 
+% %% Plot Reconstructed Signal from sampled k-space
+% signal = fftshift(ifft(signalFFT));
+% w = [-length(t)/2+1:length(t)/2]*2*pi*fs/length(t);
 % figure,
-% plot(abs(circshift(signal', round(length(signal)/2))),'b','linewidth',1.5);
+% plot(w, abs(signal),'b','linewidth',1.5);
+% xlabel('Frequency w (rad/sec)');
+% ylabel('Magnitude');
+% axis([-fs/2 fs/2]);
 % grid on;
 % title('Reconstructed Signal');
 %
 % Author : 
 % Eslam Mahmoud <eslam.adel.mahmoud.ali@gmail.com>
-
-%% Get Rx (resolution in X direction).
-Rx = FOVx / size(protons, 2);
 
 % initialize The rotated protons matrix.
 rotatedProtons = protons;
@@ -61,9 +78,9 @@ rotatedProtons = protons;
 x = -1*FOVx/2:Rx:FOVx/2-Rx;
 
 %% Get angular frequency for each proton accodring to Gx and X 
-gamma = 2*pi*42.58*10^6; %MHz/T
+gamma = 2*pi*42.58*10^6; %Hz/T
 
-% w = gamma * x
+% w = gamma * B
 w = gamma*Gx.*x; %in rad/sec 
 
 %% Get dt equation 5.77 if not provided
@@ -91,7 +108,14 @@ signal = zeros(1,length(time));
 
 % A dummy variable for indexing
 idx = 1;
+
+%Initialize waitbar and setting wait message.
+h = waitbar(0, 'please Wait ...');
+
 for t = time(1:end)
+    
+    % Update wait bar 
+    waitbar(t/tau);
     
     % Get rotation angles for all protons in that moment of time
     angles = w*t;
@@ -109,6 +133,9 @@ for t = time(1:end)
     
     % increment the index.
     idx = idx + 1;
-end   
+end 
+
+% Close the wait bar
+close(h); 
 end
 
