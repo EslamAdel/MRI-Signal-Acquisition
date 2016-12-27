@@ -52,16 +52,16 @@ function [signal, time] = getSignal(protons, Gx, FOVx, tau, phaseAcc, T2, dt)
 % Eslam Mahmoud <eslam.adel.mahmoud.ali@gmail.com>
 
 %% Get Rx (resolution in X direction).
-Rx = FOVx / size(protons, 2); % in mm
+Rx = FOVx / size(protons, 2);
 
 % initialize The rotated protons matrix.
 rotatedProtons = protons;
 
 %%  X intervals according to FOVx.
-x = -1*FOVx/2:Rx:FOVx/2-Rx; %in mm
+x = -1*FOVx/2:Rx:FOVx/2-Rx;
 
 %% Get angular frequency for each proton accodring to Gx and X 
-gamma = 2*pi*42.6; %MHz/T
+gamma = 2*pi*42.58*10^6; %MHz/T
 
 % w = gamma * x
 w = gamma*Gx.*x; %in rad/sec 

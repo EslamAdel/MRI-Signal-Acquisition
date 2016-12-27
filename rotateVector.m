@@ -21,8 +21,6 @@ function newVector = rotateVector (vector, angle, rotationAxis)
 % Author : 
 % Eslam Mahmoud <eslam.adel.mahmoud.ali@gmail.com>
 
-%% Convert to radian
-angle = angle * pi / 180;
 
 %% Build X rotation Matrix
 Rx = [1               0               0       ; ...
