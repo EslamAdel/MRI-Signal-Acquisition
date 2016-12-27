@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 25-Dec-2016 13:15:40
+% Last Modified by GUIDE v2.5 27-Dec-2016 12:20:55
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -140,23 +140,35 @@ function simulateButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 protons = [1 0 0]';
-FOVx = str2double(get(handles.FOVxVal,'String'));
-protons = repmat(protons,1,10*FOVx);
-Gx = str2double(get(handles.GxVal,'String')); %mT/m
-tau = str2double(get(handles.TRVal,'String'));%sec
+FOVx = str2double(get(handles.FOVxVal,'String'))*10^-3;
+Rx = str2double(get(handles.RxVal,'String'))*10^-3;
+protons = repmat(protons,1,round(FOVx/Rx));
+Gx = str2double(get(handles.GxVal,'String'))*10^-3; %T/m
+tau = str2double(get(handles.TRVal,'String'))*10^-3;%sec
 Accumulate = get(handles.PAVal,'value');
-dt = str2double(get(handles.dTVal,'String')); %sec
-T2 = str2double(get(handles.T2Val,'String'));
-[signalFFT, t] = getSignal(protons, Gx, FOVx, tau, Accumulate, T2,dt);
-
+dt = str2double(get(handles.dTVal,'String'))*10^-3; %sec
+if dt > 0
+fs = 1/dt;
+else
+    fs = (Gx*42.58*10^6*FOVx);
+    set(handles.dTVal,'String',(10^3)/fs);
+end
+T2 = str2double(get(handles.T2Val,'String'))*10^-3; %sec
+[signalFFT, t] = getSignal(protons, Gx, FOVx,Rx, tau, Accumulate, T2,dt);
+%% Plot the sampled k-space 
 axes(handles.signalFig);
 plot(t,real(signalFFT),'b','linewidth',1.5);
+xlabel('Time (sec)');
+ylabel('Mangnitude');
 grid on;
-title('Signal S(t)');
-signal = fft(signalFFT);
+%% Plot Reconstructed Signal from sampled k-space
+signal = fftshift(ifft(signalFFT));
+len = length(t);
+w = [-len/2+1:len/2]*2*pi*fs/len;
 axes(handles.objectFig);
-plot(abs(circshift(signal', round(length(signal)/2))),'b','linewidth',1.5);
-title('Reconstructed Object');
+plot(w, abs(signal),'b','linewidth',1.5);
+xlabel('Frequency w (rad/sec)');
+ylabel('Magnitude');
 grid on;
 
 % --- Executes during object creation, after setting all properties.
@@ -266,3 +278,49 @@ function simulateButton_KeyPressFcn(hObject, eventdata, handles)
 %	Character: character interpretation of the key(s) that was pressed
 %	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+function RxVal_Callback(hObject, eventdata, handles)
+% hObject    handle to RxVal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of RxVal as text
+%        str2double(get(hObject,'String')) returns contents of RxVal as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function RxVal_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to RxVal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit10_Callback(hObject, eventdata, handles)
+% hObject    handle to GxVal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of GxVal as text
+%        str2double(get(hObject,'String')) returns contents of GxVal as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit10_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to GxVal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
