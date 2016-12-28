@@ -83,11 +83,6 @@ gamma = 2*pi*42.58*10^6; %Hz/T
 % w = gamma * B
 w = gamma*Gx.*x; %in rad/sec 
 
-%% Get tau if not provided equation 5.87
-if tau == 0 
-    tau = 2*pi/(Gx*gamma*Rx);
-end
-
 %% Make A phase accumulation if is set 
 if phaseAcc == 1
     % Apply negative gradient -Gx for tau/2 period

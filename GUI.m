@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 27-Dec-2016 12:20:55
+% Last Modified by GUIDE v2.5 28-Dec-2016 16:43:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -139,6 +139,8 @@ function simulateButton_Callback(hObject, eventdata, handles)
 % hObject    handle to simulateButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+%% Get The Values of different parameters from line edit widgets
 protons = [1 0 0]';
 FOVx = str2double(get(handles.FOVxVal,'String'))*10^-3;
 Rx = str2double(get(handles.RxVal,'String'))*10^-3;
@@ -148,20 +150,28 @@ tau = str2double(get(handles.TRVal,'String'))*10^-3;%sec
 Accumulate = get(handles.PAVal,'value');
 dt = str2double(get(handles.dTVal,'String'))*10^-3; %sec
 gamma = 2*pi*42.58*10^6; %Hz/T
-if dt > 0
-fs = 1/dt;
-else
-    fs = (Gx*42.58*10^6*FOVx);
-    set(handles.dTVal,'String',(10^3)/fs);
+
+%% Get dt if not provided equation 5.77
+if dt == 0    
+    dt = 2*pi/(Gx*gamma*FOVx);
+    set(handles.dTVal,'String',dt*10^3);
+end
+%% Get tau if not provided equation 5.87
+if tau == 0 
+    tau = 2*pi/(Gx*gamma*Rx);
+    set(handles.TRVal,'String',tau*10^3);    
+    return;
 end
 T2 = str2double(get(handles.T2Val,'String'))*10^-3; %sec
 [signalFFT, t] = getSignal(protons, Gx, FOVx,Rx, tau, Accumulate, T2,dt);
+
 %% Plot the sampled k-space 
 axes(handles.signalFig);
 plot(t,real(signalFFT),'b','linewidth',1.5);
 xlabel('Time (sec)');
 ylabel('Mangnitude');
 grid on;
+
 %% Plot Reconstructed Signal from sampled k-space
 signal = fftshift(ifft(signalFFT));
 len = length(t);
@@ -171,32 +181,6 @@ plot(w, abs(signal),'b','linewidth',1.5);
 xlabel('X (mm)');
 ylabel('Magnitude');
 grid on;
-
-% --- Executes during object creation, after setting all properties.
-function edit7_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit7 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes during object creation, after setting all properties.
-function edit8_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit8 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
 
 % --- Executes on button press in PAVal.
 function PAVal_Callback(hObject, eventdata, handles)
@@ -325,3 +309,13 @@ function edit10_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in resetButton.
+function resetButton_Callback(hObject, eventdata, handles)
+% hObject    handle to resetButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.TRVal,'String',0);
+set(handles.dTVal,'String',0);
+simulateButton_Callback(hObject,eventdata,handles);
