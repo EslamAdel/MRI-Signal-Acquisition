@@ -147,6 +147,7 @@ Gx = str2double(get(handles.GxVal,'String'))*10^-3; %T/m
 tau = str2double(get(handles.TRVal,'String'))*10^-3;%sec
 Accumulate = get(handles.PAVal,'value');
 dt = str2double(get(handles.dTVal,'String'))*10^-3; %sec
+gamma = 2*pi*42.58*10^6; %Hz/T
 if dt > 0
 fs = 1/dt;
 else
@@ -164,10 +165,10 @@ grid on;
 %% Plot Reconstructed Signal from sampled k-space
 signal = fftshift(ifft(signalFFT));
 len = length(t);
-w = [-len/2+1:len/2]*2*pi*fs/len;
+w = [-FOVx/2+FOVx/len:FOVx/len:FOVx/2]*(10^3);
 axes(handles.objectFig);
 plot(w, abs(signal),'b','linewidth',1.5);
-xlabel('Frequency w (rad/sec)');
+xlabel('X (mm)');
 ylabel('Magnitude');
 grid on;
 
