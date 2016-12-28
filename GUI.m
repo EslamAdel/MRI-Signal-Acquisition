@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 28-Dec-2016 16:43:36
+% Last Modified by GUIDE v2.5 28-Dec-2016 20:20:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -85,8 +85,8 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 % --- Executes during object creation, after setting all properties.
-function FOVxVal_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to FOVxVal (see GCBO)
+function WidthVal_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to WidthVal (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -142,9 +142,9 @@ function simulateButton_Callback(hObject, eventdata, handles)
 
 %% Get The Values of different parameters from line edit widgets
 protons = [1 0 0]';
-FOVx = str2double(get(handles.FOVxVal,'String'))*10^-3;
+objectWidth = str2double(get(handles.WidthVal,'String'))*10^-3;
 Rx = str2double(get(handles.RxVal,'String'))*10^-3;
-protons = repmat(protons,1,round(FOVx/Rx));
+protons = repmat(protons,1,round(objectWidth/Rx));
 Gx = str2double(get(handles.GxVal,'String'))*10^-3; %T/m
 tau = str2double(get(handles.TRVal,'String'))*10^-3;%sec
 Accumulate = get(handles.PAVal,'value');
@@ -153,7 +153,7 @@ gamma = 2*pi*42.58*10^6; %Hz/T
 
 %% Get dt if not provided equation 5.77
 if dt == 0    
-    dt = 2*pi/(Gx*gamma*FOVx);
+    dt = 2*pi/(Gx*gamma*objectWidth);
     set(handles.dTVal,'String',dt*10^3);
 end
 %% Get tau if not provided equation 5.87
@@ -163,7 +163,7 @@ if tau == 0
     return;
 end
 T2 = str2double(get(handles.T2Val,'String'))*10^-3; %sec
-[signalFFT, t] = getSignal(protons, Gx, FOVx,Rx, tau, Accumulate, T2,dt);
+[signalFFT, t] = getSignal(protons, Gx, objectWidth,Rx, tau, Accumulate, T2,dt);
 
 %% Plot the sampled k-space 
 axes(handles.signalFig);
@@ -175,9 +175,11 @@ grid on;
 %% Plot Reconstructed Signal from sampled k-space
 signal = fftshift(ifft(signalFFT));
 len = length(t);
-w = [-FOVx/2+FOVx/len:FOVx/len:FOVx/2]*(10^3);
+FOVx = 2*pi/(Gx*gamma*dt);
+x = [-FOVx/2+FOVx/len:FOVx/len:FOVx/2]*(10^3);
 axes(handles.objectFig);
-plot(w, abs(signal),'b','linewidth',1.5);
+plot(x, abs(signal),'b','linewidth',1.5);
+axis([min(x)-2 max(x)+2 0 max(abs(signal))+0.2]);
 xlabel('X (mm)');
 ylabel('Magnitude');
 grid on;
@@ -212,13 +214,13 @@ function dTVal_Callback(hObject, eventdata, handles)
 
 
 
-function FOVxVal_Callback(hObject, eventdata, handles)
-% hObject    handle to FOVxVal (see GCBO)
+function WidthVal_Callback(hObject, eventdata, handles)
+% hObject    handle to WidthVal (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of FOVxVal as text
-%        str2double(get(hObject,'String')) returns contents of FOVxVal as a double
+% Hints: get(hObject,'String') returns contents of WidthVal as text
+%        str2double(get(hObject,'String')) returns contents of WidthVal as a double
 
 
 
