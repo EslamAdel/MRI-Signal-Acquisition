@@ -92,8 +92,6 @@ if phaseAcc == 1
     for i = 1:size(protons, 2)
         protons(:,i) = rotateVector(protons(:,i), angles(i), 'Z');
     end
-    % T2 relaxation
-    protons = protons.*exp(-tau/(2*T2));
 end
 
 %% Start Aquisition
@@ -123,7 +121,7 @@ for t = time(1:end)
     end
     
     % Now Sum all protons.
-    totalM = sum(rotatedProtons, 2).*exp(-t/T2);
+    totalM = sum(rotatedProtons, 2).*exp(-(t+(tau/2))/T2);
     
     % Get the signal Mxy = Mx + iMy
     signal(idx) = totalM(1) + totalM(2)*1j;
