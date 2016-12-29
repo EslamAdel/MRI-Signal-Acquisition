@@ -179,7 +179,7 @@ FOVx = 2*pi/(Gx*gamma*dt);
 x = [-FOVx/2+FOVx/len:FOVx/len:FOVx/2]*(10^3);
 axes(handles.objectFig);
 plot(x, abs(signal),'b','linewidth',1.5);
-axis([min(x)-2 max(x)+2 0 max(abs(signal))+0.2]);
+axis([min(x)-2 max(x)+2 0 max(abs(signal))*1.2]);
 xlabel('X (mm)');
 ylabel('Magnitude');
 grid on;
