@@ -1,7 +1,9 @@
 # MRI Signal Acquisition 
 A simulation of MRI signal acquisition from 1D rod object. Investigation of effect of different parameters.
 
-$$s(t) = \int_{x} M(x) \times e^{-sj\pi k_xx} dx$$
+
+<img src="https://render.githubusercontent.com/render/math?math=s(t) = \int_{x} M(x) \times e^{-sj\pi k_xx} dx">
+
 
 and 
 
