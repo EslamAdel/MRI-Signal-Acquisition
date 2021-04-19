@@ -7,12 +7,12 @@ A simulation of MRI signal acquisition from 1D rod object. Investigation of effe
 
 and 
 
-$$ 
-k_x(t) = \frac{\gamma}{2\pi} \int_{0}^{t} G_x(\tau) d\tau
-$$
+<img src="https://render.githubusercontent.com/render/math?math=k_x(t) = \frac{\gamma}{2\pi} \int_{0}^{t} G_x(\tau) d\tau">
+
 
 Where 
-$$G_x(\tau)$$
+<img src="https://render.githubusercontent.com/render/math?math=G_x(\tau)">
+
 is the gradient of in x direction.
 
 ## UI Simulation tool
